@@ -5,10 +5,22 @@
 <id>https://raw.githubusercontent.com/MrMairey/autoKernelBuild/main/logbook.xml</id>
 <link rel="self" type="application/atom+xml" href="https://raw.githubusercontent.com/MrMairey/autoKernelBuild/main/logbook.xml"/>
 <entry>
+<title>2022-02-18 | Week 4</title>
+<updated>2022-02-18T00:00:00Z</updated>
+<published>2022-02-21T00:00:00Z</published>
+<content type="html">
+	<![CDATA[ <p>The second RSS Feed / logbook post</p> <p>On samonday (14th) I created the autoKern file (the actual script) and coded the very basic commands used for the kernel build process. <p> Wednesday (16th) I added alternative commands for the option of verbose output. Obtained feedback from teacher, three main points were: </p>
+		<p> 1. define a particular group that the project aims at for end users, and obtain an interview transcript with end users to further discern program requirements </p>
+		<p> 2. Adjust project proposal to allow for a simpler understanding of technical jargon and processes </p>
+		<p> 3. Film and share a video demo of the final product of the program to demonstrate usage and screen layout </p>
+		<p> Thursday (17th) I then added a function to silence the program's output, however I am not super happy with the way this was executed, and will hopefully revise this system. Friday (18th) I modified the code to account for kernel versions and (some) file overwrites, there is a bit more that needs to be done in this area as some conflicts will still occur, but the idea is there and it works fine in most situations. </p>
+		<p>Next week I hope to create the directory tree diagram, polish the code a bit and apply teacher's feedback to the powerpoint/proposal </p>]]>
+</content>
+</entry>
+<entry>
 <title>2022-02-11 | Week 3</title>
-<link rel="alternate" type="text/html"/>
-<updated>2022-02-11T00:00Z</updated>
-<published>2022-02-14T00:00Z</published>
+<updated>2022-02-11T00:00:00Z</updated>
+<published>2022-02-14T00:00:00Z</published>
 <content type="html">
 	<![CDATA[ <p>The first RSS Feed / logbook post</p> <p> On sunday and saturday (february 12th and 13th) I will be working on the Major Project Proposal presentation. Today (11th) I am writing the text for the rss feed / logbook to be published when I create the git repo and RSS feed during week 4.</p>]]>
 </content>
