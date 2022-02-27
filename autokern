@@ -1,5 +1,6 @@
 #!/bin/sh
-
+export KERNDIR="/tmp/autokern"
+mkdir -p $KERNDIR
 ### Set a couple variables
 VERBAGE=/dev/stdout
 ## Silent mode
