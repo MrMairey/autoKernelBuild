@@ -6,6 +6,9 @@ export KERNDIR="/tmp/autokern"
 mkdir -p $KERNDIR
 VERBAGE=/dev/stdout
 cd $KERNDIR
+echo "Enter a kernel version: "
+read KERNVER
+KERNPREFIX=`echo "${KERNVER:0:1}"`
 )
 ### Silent mode
 silent()
@@ -15,17 +18,17 @@ VERBAGE=/dev/null
 ### Get source code
 dlSource()
 (
-curl -LO https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-$KERNVER.tar.xz > $VERBAGE
+curl -LO https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz > $VERBAGE
 )
 ## Verbose curl
 vdlSource()
 (
-curl -LOv https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-$KERNVER.tar.xz
+curl -LOv https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz
 )
 ## Wget alternative
 wgdlSource()
 (
-wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-$KERNVER.tar.xz > $VERBAGE
+wget https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz > $VERBAGE
 )
 ### Extract source code
 extract()
@@ -81,14 +84,11 @@ sudo mkinitcpio -v -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT
 sudo cp -v System.map /boot/System.map-linux_$KERNVER\_$COUNT
 )
 ### Get passed options
-while getopts ":hkvs:" option; do
+while getopts ":hvs:" option; do
    case $option in
       h) # display help
          echo "type 'man autokern'"
          exit;;
-      k) # Enter kernel ver
-         KERNVER=$OPTARG
-	 echo $KERNVER;;
       v) # Verbose
 	 echo "placeholder";;
       s) # Silent
