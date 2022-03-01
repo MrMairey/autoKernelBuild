@@ -1,9 +1,9 @@
 #!/bin/sh
+### Set a couple variables
 export KERNDIR="/tmp/autokern"
 mkdir -p $KERNDIR
-### Set a couple variables
 VERBAGE=/dev/stdout
-## Silent mode
+### Silent mode
 # VERBAGE=/dev/null
 ### Get source code
 curl -LO https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-$KERNVER.tar.xz > $VERBAGE
