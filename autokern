@@ -1,45 +1,100 @@
 #!/bin/sh
 ### Set a couple variables
+opening()
+(
 export KERNDIR="/tmp/autokern"
 mkdir -p $KERNDIR
 VERBAGE=/dev/stdout
+cd $KERNDIR
+)
 ### Silent mode
-# VERBAGE=/dev/null
+silent()
+(
+VERBAGE=/dev/null
+)
 ### Get source code
+dlSource()
+(
 curl -LO https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-$KERNVER.tar.xz > $VERBAGE
+)
 ## Verbose curl
-# curl -LOv https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-$KERNVER.tar.xz
+vdlSource()
+(
+curl -LOv https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-$KERNVER.tar.xz
+)
 ## Wget alternative
-# wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-$KERNVER.tar.xz > $VERBAGE
-
+wgdlSource()
+(
+wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-$KERNVER.tar.xz > $VERBAGE
+)
 ### Extract source code
+extract()
+(
 tar -xJf linux-$KERNVER.tar.xz > $VERBAGE
+)
 ## Verbose alternative extract
-# tar -xvJf linux-$KERNVER.tar.xz
+vextract()
+(
+tar -xvJf linux-$KERNVER.tar.xz
+)
+premake()
+(
 cd linux-$KERNVER
-
-### make command
 let "COUNT=1"
 while [ -f /boot/vmlinuz-linux_$KERNVER\_$COUNT ];
 do
 	let COUNT+=1
 done
 COMPTHREADS=`nproc`
+)
+make()
+(
 make -j$COMPTHREADS > $VERBAGE
 sudo make modules_install > $VERBAGE
+)
 ## Verbose alternative make
-# sudo make --debug=v -j$COMPTHREADS
-# sudo make --debug=v -j$COMPTHREADS modules_install
-
+vmake()
+(
+sudo make --debug=v -j$COMPTHREADS
+sudo make --debug=v -j$COMPTHREADS modules_install
+)
 ### copy bzImage
+bzimg()
+(
 sudo cp arch/x86_64/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$COUNT
-
+)
 ## Verbose alternative copy bz
-# sudo cp -v arch/x86_64/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$COUNT
-
+vbzimg()
+(
+sudo cp -v arch/x86_64/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$COUNT
+)
 ### initramfs & systemmap
+initmap()
+(
 sudo mkinitcpio -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT > $VERBAGE
 sudo cp System.map /boot/System.map-linux_$KERNVER\_$COUNT
+)
 ## Verbose alternative initramfs & systemmap
-# sudo mkinitcpio -v -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT
-# sudo cp -v System.map /boot/System.map-linux_$KERNVER\_$COUNT
+vinitmap()
+(
+sudo mkinitcpio -v -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT
+sudo cp -v System.map /boot/System.map-linux_$KERNVER\_$COUNT
+)
+### Get passed options
+while getopts ":hkvs:" option; do
+   case $option in
+      h) # display help
+         echo "type 'man autokern'"
+         exit;;
+      k) # Enter kernel ver
+         KERNVER=$OPTARG
+	 echo $KERNVER;;
+      v) # Verbose
+	 echo "placeholder";;
+      s) # Silent
+		silent;;
+     \?) # Invalid option
+         echo "Error: Invalid option"
+         exit;;
+   esac
+done
