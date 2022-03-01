@@ -18,7 +18,7 @@ VERBAGE=/dev/null
 ### Get source code
 dlSource()
 (
-curl -LO https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz > $VERBAGE
+curl -LO https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz &>$VERBAGE
 )
 ## Verbose curl
 vdlSource()
@@ -28,17 +28,18 @@ curl -LOv https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.
 ## Wget alternative
 wgdlSource()
 (
-wget https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz > $VERBAGE
+wget https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz &>$VERBAGE
 )
 ### Extract source code
 extract()
 (
-tar -xJf linux-$KERNVER.tar.xz > $VERBAGE
+tar -xJf linux-$KERNVER.tar.xz || echo "invalid kernel version"; exit 1
 )
 ## Verbose alternative extract
 vextract()
 (
-tar -xvJf linux-$KERNVER.tar.xz
+tar -xvJf linux-$KERNVER.tar.xz || echo "invalid kernel version"; exit 1
+
 )
 premake()
 (
@@ -52,8 +53,8 @@ COMPTHREADS=`nproc`
 )
 make()
 (
-make -j$COMPTHREADS > $VERBAGE
-sudo make modules_install > $VERBAGE
+make -j$COMPTHREADS &>$VERBAGE
+sudo make modules_install &>$VERBAGE
 )
 ## Verbose alternative make
 vmake()
@@ -74,7 +75,7 @@ sudo cp -v arch/x86_64/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$COUNT
 ### initramfs & systemmap
 initmap()
 (
-sudo mkinitcpio -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT > $VERBAGE
+sudo mkinitcpio -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT &>$VERBAGE
 sudo cp System.map /boot/System.map-linux_$KERNVER\_$COUNT
 )
 ## Verbose alternative initramfs & systemmap
