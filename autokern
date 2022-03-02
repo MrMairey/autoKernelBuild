@@ -5,30 +5,24 @@ opening()
 export KERNDIR="/tmp/autokern"
 mkdir -p $KERNDIR
 VERBAGE=/dev/stdout
+DLCOM="curl -LO"
 cd $KERNDIR
+)
+preDl()
+(
 echo "Enter a kernel version: "
 read KERNVER
-KERNPREFIX=`echo "${KERNVER:0:1}"`
-)
-### Silent mode
-silent()
-(
-VERBAGE=/dev/null
+KERNPREFIX=`echo $KERNVER | cut -c1`
 )
 ### Get source code
 dlSource()
 (
-curl -LO https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz &>$VERBAGE
+$DLCOM https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz &>$VERBAGE
 )
-## Verbose curl
+## Verbose download
 vdlSource()
 (
-curl -LOv https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz
-)
-## Wget alternative
-wgdlSource()
-(
-wget https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz &>$VERBAGE
+$DLCOM\v https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz
 )
 ### Extract source code
 extract()
@@ -84,16 +78,19 @@ vinitmap()
 sudo mkinitcpio -v -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT
 sudo cp -v System.map /boot/System.map-linux_$KERNVER\_$COUNT
 )
+opening
 ### Get passed options
-while getopts ":hvs:" option; do
+while getopts ":hvsw:" option; do
    case $option in
       h) # display help
          echo "type 'man autokern'"
-         exit;;
+         exit 0;;
       v) # Verbose
 	 echo "placeholder";;
       s) # Silent
-		silent;;
+		VERBAGE=/dev/null;;
+      w) # Wget
+		DLCOM="wget -v";;
      \?) # Invalid option
          echo "Error: Invalid option"
          exit;;
