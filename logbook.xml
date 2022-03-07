@@ -5,6 +5,21 @@
 <id>https://raw.githubusercontent.com/MrMairey/autoKernelBuild/main/logbook.xml</id>
 <link rel="self" type="application/atom+xml" href="https://raw.githubusercontent.com/MrMairey/autoKernelBuild/main/logbook.xml"/>
 <entry>
+<title>2022-02-25 | Week 6</title>
+<updated>2022-03-04T00:00:00Z</updated>
+<published>2022-03-07T00:00:00Z</published>
+<content type="html">
+	<![CDATA[ <p> Fourth logbook post </p>
+
+<p> Week 6 Log </p>
+<p> On tues 1st march I moved the KERNDIR code i added from last week. Also I added some code to interpret options and arguments, still needs a bit of work. Grouped sections of program into subprograms/modules. </p>
+<p> On wed 2nd march I added the prompt to obtain a kernel version from the user and saved it as a variable, additionally I added code to allow for kernel versions other than v5.x.x to be used. Later that afternoon I made some revisions to the download system, fixing POSIX shell compatibility and debloating code</p>
+<p>Next week I will polish code, apply teacher's feedback to powerpoint/proposal and add the placeholders for the user queries.</p>
+]]>
+</content>
+</entry>
+
+<entry>
 <title>2022-02-25 | Week 5</title>
 <updated>2022-02-25T00:00:00Z</updated>
 <published>2022-02-28T00:00:00Z</published>
