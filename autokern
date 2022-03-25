@@ -33,7 +33,6 @@ tar -xJf linux-$KERNVER.tar.xz || echo "invalid kernel version"; exit 1
 vextract()
 (
 tar -xvJf linux-$KERNVER.tar.xz || echo "invalid kernel version"; exit 1
-
 )
 premake()
 (
@@ -78,7 +77,6 @@ vinitmap()
 sudo mkinitcpio -v -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT
 sudo cp -v System.map /boot/System.map-linux_$KERNVER\_$COUNT
 )
-opening
 ### Get passed options
 while getopts ":hvsw:" option; do
    case $option in
@@ -86,7 +84,7 @@ while getopts ":hvsw:" option; do
          echo "type 'man autokern'"
          exit 0;;
       v) # Verbose
-	 echo "placeholder";;
+	      AUTOKERNVERB = v;;
       s) # Silent
 		VERBAGE=/dev/null;;
       w) # Wget
@@ -96,3 +94,7 @@ while getopts ":hvsw:" option; do
          exit;;
    esac
 done
+### Actually run the code
+opening && preDl && $AUTOKERNVERB\dlSource && $AUTOKERNVERB\extract && preMake && $AUTOKERNVERB\make && $AUTOKERNVERB\bzimg && $AUTOKERNVERB\initmap || echo "failed"
+unset AUTOKERNVERB
+exit
