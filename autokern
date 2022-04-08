@@ -44,6 +44,19 @@ do
 done
 COMPTHREADS=`nproc`
 )
+vkernconf()
+(
+cp -v ~/.config/autoKern/kernconf .config || zcat /proc/config.gz > .config || make defconfig
+cp -v ~/.config/autoKern/kernconf ~/.config/autoKern/kernconf.old
+cp -v .config ~/.config/autoKern/kernconf
+)
+kernconf()
+(
+cp ~/.config/autoKern/kernconf .config
+cp ~/.config/autoKern/kernconf .config || zcat /proc/config.gz > .config || make defconfig
+cp ~/.config/autoKern/kernconf ~/.config/autoKern/kernconf.old
+cp .config ~/.config/autoKern/kernconf
+)
 make()
 (
 make -j$COMPTHREADS &>$VERBAGE
@@ -52,7 +65,7 @@ sudo make modules_install &>$VERBAGE
 ## Verbose alternative make
 vmake()
 (
-sudo make --debug=v -j$COMPTHREADS
+make --debug=v -j$COMPTHREADS
 sudo make --debug=v -j$COMPTHREADS modules_install
 )
 ### copy bzImage
@@ -95,6 +108,6 @@ while getopts ":hvsw:" option; do
    esac
 done
 ### Actually run the code
-opening && preDl && $AUTOKERNVERB\dlSource && $AUTOKERNVERB\extract && preMake && $AUTOKERNVERB\make && $AUTOKERNVERB\bzimg && $AUTOKERNVERB\initmap || echo "failed"
+opening && preDl && $AUTOKERNVERB\dlSource && $AUTOKERNVERB\extract && preMake && $AUTOKERNVERB\kernconf $AUTOKERNVERB\make && $AUTOKERNVERB\bzimg && $AUTOKERNVERB\initmap || echo "failed"
 unset AUTOKERNVERB
 exit
