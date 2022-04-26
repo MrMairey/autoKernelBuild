@@ -1,22 +1,25 @@
 #!/bin/sh
 ### Set a couple variables
-opening()
-(
-KERNDIR=$HOME\/.cache/autoKern
+export KERNDIR=$HOME\/.cache/autoKern
 mkdir -p $KERNDIR
-VERBAGE=/dev/stdout
-DLCOM="curl -LO"
+export VERBAGE=/dev/stdout
+export DLCOM="curl -LO"
+export COMPTHREADS=`nproc`
 cd $KERNDIR
-)
-preDl()
-(
 echo "Enter a kernel version: "
 read KERNVER
-KERNPREFIX=`echo $KERNVER | cut -c1`
-)
+export KERNVER=$KERNVER
+export KERNPREFIX=`echo $KERNVER | cut -c1`
+COUNT=1
+while [ -f /boot/vmlinuz-linux_$KERNVER\_$COUNT ];
+do
+	let COUNT+=1
+done
+export COUNT=$COUNT
 ### Get source code
 dlSource()
 (
+echo $KERNDIR $VERBAGE $DLCOM $KERNVER $KERNPREFIX $COUNT $COMPTHREADS
 $DLCOM https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz &>$VERBAGE
 )
 ## Verbose download
@@ -37,12 +40,6 @@ tar -xvJf linux-$KERNVER.tar.xz || echo "invalid kernel version"; exit 1
 premake()
 (
 cd linux-$KERNVER
-let "COUNT=1"
-while [ -f /boot/vmlinuz-linux_$KERNVER\_$COUNT ];
-do
-	let COUNT+=1
-done
-COMPTHREADS=`nproc`
 )
 vkernconf()
 (
@@ -108,6 +105,6 @@ while getopts ":hvsw:" option; do
    esac
 done
 ### Actually run the code
-opening && preDl && $AUTOKERNVERB\dlSource && $AUTOKERNVERB\extract && preMake && $AUTOKERNVERB\kernconf $AUTOKERNVERB\make && $AUTOKERNVERB\bzimg && $AUTOKERNVERB\initmap || echo "failed"
+$AUTOKERNVERB\dlSource && $AUTOKERNVERB\extract && preMake && $AUTOKERNVERB\kernconf $AUTOKERNVERB\make && $AUTOKERNVERB\bzimg && $AUTOKERNVERB\initmap || echo "failed"
 unset AUTOKERNVERB
 exit
