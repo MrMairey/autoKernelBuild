@@ -2,7 +2,7 @@
 ### Set a couple variables
 opening()
 (
-export KERNDIR="/tmp/autokern"
+KERNDIR=$HOME\/.cache/autoKern
 mkdir -p $KERNDIR
 VERBAGE=/dev/stdout
 DLCOM="curl -LO"
