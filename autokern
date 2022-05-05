@@ -9,6 +9,7 @@ cd $KERNDIR
 echo "Enter a kernel version: "
 read KERNVER
 export KERNVER=$KERNVER
+[ -z $KERNVER ] && curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'
 export KERNPREFIX=`echo $KERNVER | cut -c1`
 COUNT=1
 while [ -f /boot/vmlinuz-linux_$KERNVER\_$COUNT ];
