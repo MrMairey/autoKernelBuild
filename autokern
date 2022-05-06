@@ -38,10 +38,6 @@ vextract()
 (
 tar -xvJf linux-$KERNVER.tar.xz || echo "invalid kernel version"; exit 1
 )
-premake()
-(
-cd linux-$KERNVER
-)
 vkernconf()
 (
 cp -v ~/.config/autoKern/kernconf .config || zcat /proc/config.gz > .config || make defconfig
@@ -106,6 +102,12 @@ while getopts ":hvsw:" option; do
    esac
 done
 ### Actually run the code
-$AUTOKERNVERB\dlSource && $AUTOKERNVERB\extract && preMake && $AUTOKERNVERB\kernconf $AUTOKERNVERB\make && $AUTOKERNVERB\bzimg && $AUTOKERNVERB\initmap || echo "failed"
+$AUTOKERNVERB\dlSource
+$AUTOKERNVERB\extract
+cd linux-$KERNVER
+$AUTOKERNVERB\kernconf
+$AUTOKERNVERB\make
+$AUTOKERNVERB\bzimg
+$AUTOKERNVERB\initmap
 unset AUTOKERNVERB
 exit
