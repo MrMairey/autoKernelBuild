@@ -31,58 +31,59 @@ vdlSource()
 $DLCOM\v https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz
 )
 ### Extract source code
-extract()
+extractSc()
 (
 tar -xJf linux-$KERNVER.tar.xz || echo "invalid kernel version"; exit 1
 )
 ## Verbose alternative extract
-vextract()
+vextractSc()
 (
 tar -xvJf linux-$KERNVER.tar.xz || echo "invalid kernel version"; exit 1
 )
-vkernconf()
+vkernConf()
 (
 cp -v $AUTOKERNCONF/kernconf .config || zcat /proc/config.gz > .config || make defconfig
 mv -f -v $AUTOKERNCONF/kernconf $AUTOKERNCONF/kernconf.old
 cp -v .config $AUTOKERNCONF/kernconf
 )
-kernconf()
+kernConf()
 (
 cp $AUTOKERNCONF/kernconf .config || zcat /proc/config.gz > .config || make defconfig
 mv -f $AUTOKERNCONF/kernconf $AUTOKERNCONF/kernconf.old
 cp .config $AUTOKERNCONF/kernconf
 )
-make()
+runMake()
 (
-make -j$COMPTHREADS #&>$VERBAGE
+echo maketime
+#make -j$COMPTHREADS #&>$VERBAGE
 sudo make modules_install #&>$VERBAGE
 )
 ## Verbose alternative make
-vmake()
+vrunMake()
 (
 make --debug=v -j$COMPTHREADS
 sudo make --debug=v -j$COMPTHREADS modules_install
 )
 ### copy bzImage
-bzimg()
+bzImg()
 (
 sudo cp arch/x86_64/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$COUNT
 )
 ## Verbose alternative copy bz
-vbzimg()
+vbzImg()
 (
 sudo cp -v arch/x86_64/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$COUNT
 )
 ### initramfs & systemmap
-initmap()
+initMap()
 (
-sudo mkinitcpio -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT #&>$VERBAGE
+sudo mkinitcpio -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT.img #&>$VERBAGE
 sudo cp System.map /boot/System.map-linux_$KERNVER\_$COUNT
 )
 ## Verbose alternative initramfs & systemmap
-vinitmap()
+vinitMap()
 (
-sudo mkinitcpio -v -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT
+sudo mkinitcpio -v -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT.img
 sudo cp -v System.map /boot/System.map-linux_$KERNVER\_$COUNT
 )
 ### Get passed options
@@ -104,11 +105,11 @@ while getopts ":hvsw:" option; do
 done
 ### Actually run the code
 $AUTOKERNVERB\dlSource
-$AUTOKERNVERB\extract
+$AUTOKERNVERV\extractSc
 cd linux-$KERNVER
-$AUTOKERNVERB\kernconf
-$AUTOKERNVERB\make
-$AUTOKERNVERB\bzimg
-$AUTOKERNVERB\initmap
+$AUTOKERNVERB\kernConf
+$AUTOKERNVERB\runMake
+$AUTOKERNVERB\bzImg
+$AUTOKERNVERB\initMap
 unset AUTOKERNVERB
 exit
