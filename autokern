@@ -1,7 +1,9 @@
 #!/bin/sh
 ### Set a couple variables
 export KERNDIR=$HOME\/.cache/autoKern
+export AUTOKERNCONF=$HOME\/.config/autoKern
 mkdir -p $KERNDIR
+mkdir -p $AUTOKERNCONF
 export VERBAGE=/dev/stdout
 export DLCOM="curl -LO"
 export COMPTHREADS=`nproc`
@@ -21,7 +23,7 @@ export COUNT=$COUNT
 dlSource()
 (
 echo $KERNDIR $VERBAGE $DLCOM $KERNVER $KERNPREFIX $COUNT $COMPTHREADS
-$DLCOM https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz &>$VERBAGE
+$DLCOM https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz #&>$VERBAGE
 )
 ## Verbose download
 vdlSource()
@@ -40,21 +42,20 @@ tar -xvJf linux-$KERNVER.tar.xz || echo "invalid kernel version"; exit 1
 )
 vkernconf()
 (
-cp -v ~/.config/autoKern/kernconf .config || zcat /proc/config.gz > .config || make defconfig
-cp -v ~/.config/autoKern/kernconf ~/.config/autoKern/kernconf.old
-cp -v .config ~/.config/autoKern/kernconf
+cp -v $AUTOKERNCONF/kernconf .config || zcat /proc/config.gz > .config || make defconfig
+mv -f -v $AUTOKERNCONF/kernconf $AUTOKERNCONF/kernconf.old
+cp -v .config $AUTOKERNCONF/kernconf
 )
 kernconf()
 (
-cp ~/.config/autoKern/kernconf .config
-cp ~/.config/autoKern/kernconf .config || zcat /proc/config.gz > .config || make defconfig
-cp ~/.config/autoKern/kernconf ~/.config/autoKern/kernconf.old
-cp .config ~/.config/autoKern/kernconf
+cp $AUTOKERNCONF/kernconf .config || zcat /proc/config.gz > .config || make defconfig
+mv -f $AUTOKERNCONF/kernconf $AUTOKERNCONF/kernconf.old
+cp .config $AUTOKERNCONF/kernconf
 )
 make()
 (
-make -j$COMPTHREADS &>$VERBAGE
-sudo make modules_install &>$VERBAGE
+make -j$COMPTHREADS #&>$VERBAGE
+sudo make modules_install #&>$VERBAGE
 )
 ## Verbose alternative make
 vmake()
@@ -75,7 +76,7 @@ sudo cp -v arch/x86_64/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$COUNT
 ### initramfs & systemmap
 initmap()
 (
-sudo mkinitcpio -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT &>$VERBAGE
+sudo mkinitcpio -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT #&>$VERBAGE
 sudo cp System.map /boot/System.map-linux_$KERNVER\_$COUNT
 )
 ## Verbose alternative initramfs & systemmap
