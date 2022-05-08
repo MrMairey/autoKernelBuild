@@ -1,5 +1,6 @@
 #!/bin/sh
 ### Set a couple variables
+type gcc make ld depmod perl bc openssl grub-mkconfig &> /dev/null || echo "The required programs are not installed, for more information, run 'autokern -h'"
 export KERNDIR=$HOME\/.cache/autoKern
 export AUTOKERNCONF=$HOME\/.config/autoKern
 mkdir -p $KERNDIR
@@ -16,7 +17,7 @@ export KERNPREFIX=`echo $KERNVER | cut -c1`
 COUNT=1
 while [ -f /boot/vmlinuz-linux_$KERNVER\_$COUNT ];
 do
-	COUNT=COUNT+1
+	COUNT=$((COUNT+1))
 done
 export COUNT=$COUNT
 ### Get source code
@@ -87,7 +88,7 @@ sudo cp -v System.map /boot/System.map-linux_$KERNVER\_$COUNT
 ## Update bootloader
 bootloaderUp()
 (
-sudo grub-mkconfig -o /boot/grub/grub.cfg
+[ -f /boot/grub/grub.cfg ] && sudo grub-mkconfig -o /boot/grub/grub.cfg
 )
 ### Get passed options
 while getopts ":hvsw:" option; do
