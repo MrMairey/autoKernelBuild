@@ -4,7 +4,7 @@ while getopts ":hvsw:" option; do
    case $option in
       h) # display help
 	       cd "$(dirname "$0")"
-	       man -l autokern.man
+	       man -l autokern.man || groff -mandoc autokern.man -T utf8 | less || groff -mandoc autokern.man > autokern.man.pdf
          exit 0;;
       v) # Verbose
 	      AUTOKERNVERB = v;;
