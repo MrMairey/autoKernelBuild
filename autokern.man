@@ -1,0 +1,241 @@
+'\" t
+.pc
+.TH AUTOKERN 1 "2022-03-17" "1.0" "autoKernelBuild"
+.SH NAME
+autoKern \- an automation script for the downloading, compilation and installation of a linux kernel.
+
+.SH SYNOPSIS
+.\" general usage
+.B autokern
+.RI [\| "options" \|]
+.\" kernver options
+.br
+.B autokern
+{
+.B \-k
+.I kernel_version
+|
+.B \-l
+}
+.RI [\| "options" \|]
+.\" verbose and silent options
+.br
+.B autokern
+{
+.B \-v
+|
+.B \-s
+}
+.RI [\| "options" \|]
+.\" wget option
+.br
+.B autokern
+.B \-w
+.RI [\| "options" \|]
+
+.SH CONFIGURATION
+.B autokern
+can be configured by defining program variables in the
+.IR $HOME/.config/autokern/config
+file accordingly (see
+.BR ENVIRONMENT
+for a list of variables).
+Additionally,
+.B autokern
+can be configured to use a user-provided kernel
+.IR .config
+file by writing it to
+.IR $HOME/.config/autokern/kernconf
+\.
+
+.SH DESCRIPTION
+.B autokern
+is a program that automates the process of downloading, compiling and installing a linux kernel.
+The program allows a user to pass a kernel version and the program will download the source-code from the
+.UL kernel.org
+website, extract the source-code, apply a user-supplied configuration, compile and install the kernel, minimizing unnessecary user interactions. The program also provides the ability to download the latest stable mainline kernel for installation. Functionality includes a silent mode, for an no-output installation, as well as a verbose mode, for debugging.
+
+.SH EXAMPLES
+.TP \w'autokern\ 'u
+.BI autokern \ \-h
+Display the manual page for
+.B autokern
+\.
+.TP
+.BI autokern \ \-v
+Runs
+.B autokern
+with verbose outputs enabled.
+.TP
+.BI autokern \ \-k \ 5.14.5
+Sets the kernel version of
+.B autokern
+to 5.14.5
+.TP
+.BI autokern \ \-l
+Sets the kernel version of
+.B autokern
+to the latest stable mainline version (same as entering nothing at kernel version prompt).
+.TP
+.BI autokern \ \-w
+Runs
+.B autokern
+in wget mode, which uses wget for downloads rather than curl.
+.TP
+.BI autokern \ \-s
+Runs
+.B autokern
+with silent output.
+.TP
+.BI autokern \ \-lw
+Runs
+.B autokern
+in wget mode (
+.BI -w
+) as well as using the latest stable mainline version (
+.BI -l
+).
+
+.SH DEFAULTS
+By default:
+.B autokern
+.TP
+will use the latest stable mainline kernel version unless specified with the
+.B \-k
+option or specified when prompted.
+.TP
+uses curl to download the kernel source-code unless the
+.B \-w
+option is specified, which uses wget for this functionality.
+.TP
+outputs normal outputs unless the
+.B \-s
+option or the
+.B \-v
+option is specified
+
+.SH OPTIONS
+.SS General options
+.TP
+.BI \-w
+	Run
+.B autokern
+with wget as the download program for downloading kernel source-code.
+.TP
+.BR \-v
+	Run programs within
+.B autokern
+with verbose output. Conflicts with
+.B -s
+\.
+.TP
+.BR \-s
+	Run
+.B autokern
+with silent output. Conflicts with
+.B -v
+\.
+.TP
+.BR \-l
+	Run
+.B autokern
+with the kernel version set to the latest stable mainline version (skips kernel version prompt).
+	The program searches for the kernel version of the
+.I Latest Release
+button on
+.UR https://www.kernel.org
+.UE
+\. Conflicts with
+.B -k
+\.
+.TP
+.BR \-h
+	Runs the help/man page for
+.B autokern
+which you are reading right now. Uses man to interpret the nroff man file.
+
+.SS Argumentative options
+.TP
+.BI \-k \ kernel_version
+	Uses the kernel version argument provided as the version to download.
+Conflicts with
+.B -l
+\.
+
+.SH DEPENDENCIES
+.TP
+The following programs are required for the script to function:
+.TP
+tar gcc make ld depmod perl bc openssl grub mkinitcpio
+
+On systems running the
+.B pacman
+package manager, the following command can be run to install all nessecary programs.
+
+.TP
+.B pacman -S base-devel xmlto kmod inetutils bc libelf git
+
+More information can be found at the following link:
+.UR https://www.kernel.org/doc/html/v4.15/process/changes.html
+.UE
+
+.SH ENVIRONMENT
+All environment variables, if pre-set or defined in
+.IR $HOME/.config/autokern/config
+will be used over default values. (see
+.BR FILES
+for more information).
+
+.TP
+.B KERNDIR
+Defines the directory path where the program performs its operations (downloading, extracting, compiling).
+.TP
+.B DLCOM
+Determines the command used to download nessecary files (wget or curl).
+.TP
+.B COMPTHREADS
+Determines the number of CPU threads used to compile the kernel, by default is set by ‘nproc’ which prints the total number of threads in a machine.
+.TP
+.B KERNVER
+The version number of the kernel as specified by the user when prompted or from options.
+.TP
+.B AUTOKERNVERB
+When declared as "v", the program runs code with verbose flags. The same as passing the
+.B -v
+option.
+.TP
+.B AUTOKERNCONF
+Defines the directory location where the program's configuration file is stored, as well as the kernel .config file and backup.
+
+.SH FILES
+.TP
+.I $HOME/.config/autokern/config
+The program's configuration file which is written as shell script. Defined and can be modified by the
+.RB $ AUTOKERNCONF
+environment variable, (see
+.BR ENVIRONMENT
+for more information).
+.TP
+.I $HOME/.config/autokern/kernconf
+The kernel .config file to be imported by the program by default, if non-existent, is replaced by running kernel config found at
+.IR /proc/config.gz
+using zcat.
+Defined and can be modified by the
+.RB $ AUTOKERNCONF
+environment variable, (see
+.BR ENVIRONMENT
+for more information).
+
+.TP
+.I $HOME/.cache/autokern/
+The directory used by default where the program performs its operations Defined and can be modified by the
+.RB $ KERNDIR
+environment variable, (see
+.BR ENVIRONMENT
+for more information).
+
+
+.SH REPOSITORY
+The program's source-code repository can be found at the following link.
+.UR https://github.com/MrMairey/autoKernelBuild
+.UE
