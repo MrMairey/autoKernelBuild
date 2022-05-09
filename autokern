@@ -1,6 +1,10 @@
 #!/bin/sh
 ### Set a couple variables
-type gcc make ld depmod perl bc openssl grub-mkconfig mkinitcpio &> /dev/null || (echo "The required programs are not installed, for more information, run 'autokern -h'"; echo hi )
+notInstalled()
+(
+echo "The required programs are not installed, for more information, run 'autokern -h'" ; return 1
+)
+type gcc make ld depmod perl bc openssl grub-mkconfig mkinitcpio >> /dev/null || notInstalled || exit;
 export KERNDIR=$HOME\/.cache/autoKern
 export AUTOKERNCONF=$HOME\/.config/autoKern
 mkdir -p $KERNDIR
