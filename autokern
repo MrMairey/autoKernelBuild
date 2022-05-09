@@ -1,4 +1,22 @@
 #!/bin/sh
+### Getopts
+while getopts ":hvsw:" option; do
+   case $option in
+      h) # display help
+	       cd "$(dirname "$0")"
+	       man -l autokern.man
+         exit 0;;
+      v) # Verbose
+	      AUTOKERNVERB = v;;
+      s) # Silent
+		VERBAGE=/dev/null;;
+      w) # Wget
+		DLCOM="wget -v";;
+     \?) # Invalid option
+         echo "Error: Invalid option"
+         exit;;
+   esac
+done
 ### Set a couple variables
 notInstalled()
 (
@@ -94,23 +112,6 @@ bootloaderUp()
 (
 	[ -f /boot/grub/grub.cfg ] && sudo grub-mkconfig -o /boot/grub/grub.cfg
 )
-### Get passed options
-while getopts ":hvsw:" option; do
-   case $option in
-      h) # display help
-         echo "type 'man autokern'"
-         exit 0;;
-      v) # Verbose
-	      AUTOKERNVERB = v;;
-      s) # Silent
-		VERBAGE=/dev/null;;
-      w) # Wget
-		DLCOM="wget -v";;
-     \?) # Invalid option
-         echo "Error: Invalid option"
-         exit;;
-   esac
-done
 ### Actually run the code
 echo $KERNDIR $VERBAGE $DLCOM $KERNVER $KERNPREFIX $COUNT $COMPTHREADS
 $AUTOKERNVERB\dlSource
