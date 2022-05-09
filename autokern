@@ -2,9 +2,9 @@
 ### Set a couple variables
 notInstalled()
 (
-echo "The required programs are not installed, for more information, run 'autokern -h'" ; return 1
+	echo "The required programs are not installed, for more information, run 'autokern -h'" ; return 1
 )
-type gcc make ld depmod perl bc openssl grub-mkconfig mkinitcpio >> /dev/null || notInstalled || exit;
+type tar gcc make ld depmod perl bc openssl grub-mkconfig mkinitcpio >> /dev/null || notInstalled || exit;
 export KERNDIR=$HOME\/.cache/autoKern
 export AUTOKERNCONF=$HOME\/.config/autoKern
 mkdir -p $KERNDIR
@@ -27,72 +27,72 @@ export COUNT=$COUNT
 ### Get source code
 dlSource()
 (
-$DLCOM https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz #&>$VERBAGE
+	$DLCOM https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz #&>$VERBAGE
 )
 ## Verbose download
 vdlSource()
 (
-$DLCOM\v https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz
+	$DLCOM\v https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz
 )
 ### Extract source code
 extractSc()
 (
-tar -xJf linux-$KERNVER.tar.xz || echo "invalid kernel version"; exit 1
+	tar -xJf linux-$KERNVER.tar.xz || echo "invalid kernel version"; exit 1
 )
 ## Verbose alternative extract
 vextractSc()
 (
-tar -xvJf linux-$KERNVER.tar.xz || echo "invalid kernel version"; exit 1
+	tar -xvJf linux-$KERNVER.tar.xz || echo "invalid kernel version"; exit 1
 )
 vkernConf()
 (
-cp -v $AUTOKERNCONF/kernconf .config || zcat /proc/config.gz > .config || make defconfig
-mv -f -v $AUTOKERNCONF/kernconf $AUTOKERNCONF/kernconf.old
-cp -v .config $AUTOKERNCONF/kernconf
+	cp -v $AUTOKERNCONF/kernconf .config || zcat /proc/config.gz > .config || make defconfig
+	mv -f -v $AUTOKERNCONF/kernconf $AUTOKERNCONF/kernconf.old
+	cp -v .config $AUTOKERNCONF/kernconf
 )
 kernConf()
 (
-cp $AUTOKERNCONF/kernconf .config || zcat /proc/config.gz > .config || make defconfig
-mv -f $AUTOKERNCONF/kernconf $AUTOKERNCONF/kernconf.old
-cp .config $AUTOKERNCONF/kernconf
+	cp $AUTOKERNCONF/kernconf .config || zcat /proc/config.gz > .config || make defconfig
+	mv -f $AUTOKERNCONF/kernconf $AUTOKERNCONF/kernconf.old
+	cp .config $AUTOKERNCONF/kernconf
 )
 runMake()
 (
-make -j$COMPTHREADS #&>$VERBAGE
-sudo make modules_install #&>$VERBAGE
+	make -j$COMPTHREADS #&>$VERBAGE
+	sudo make modules_install #&>$VERBAGE
 )
 ## Verbose alternative make
 vrunMake()
 (
-make --debug=v -j$COMPTHREADS
-sudo make --debug=v -j$COMPTHREADS modules_install
+	make --debug=v -j$COMPTHREADS
+	sudo make --debug=v -j$COMPTHREADS modules_install
 )
 ### copy bzImage
 bzImg()
 (
-sudo cp arch/x86_64/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$COUNT
+	sudo cp arch/x86_64/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$COUNT
 )
 ## Verbose alternative copy bz
 vbzImg()
 (
-sudo cp -v arch/x86_64/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$COUNT
+	sudo cp -v arch/x86_64/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$COUNT
 )
 ### initramfs & systemmap
 initMap()
 (
-sudo mkinitcpio -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT.img #&>$VERBAGE
-sudo cp System.map /boot/System.map-linux_$KERNVER\_$COUNT
+	sudo mkinitcpio -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT.img #&>$VERBAGE
+	sudo cp System.map /boot/System.map-linux_$KERNVER\_$COUNT
 )
 ## Verbose alternative initramfs & systemmap
 vinitMap()
 (
-sudo mkinitcpio -v -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT.img
-sudo cp -v System.map /boot/System.map-linux_$KERNVER\_$COUNT
+	sudo mkinitcpio -v -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT.img
+	sudo cp -v System.map /boot/System.map-linux_$KERNVER\_$COUNT
 )
 ## Update bootloader
 bootloaderUp()
 (
-[ -f /boot/grub/grub.cfg ] && sudo grub-mkconfig -o /boot/grub/grub.cfg
+	[ -f /boot/grub/grub.cfg ] && sudo grub-mkconfig -o /boot/grub/grub.cfg
 )
 ### Get passed options
 while getopts ":hvsw:" option; do
