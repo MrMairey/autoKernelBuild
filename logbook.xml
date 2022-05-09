@@ -4,6 +4,22 @@
 <link rel="alternate" type="text/html" href="https://raw.githubusercontent.com/MrMairey/autoKernelBuild/main/logbook.xml"/>
 <id>https://raw.githubusercontent.com/MrMairey/autoKernelBuild/main/logbook.xml</id>
 <link rel="self" type="application/atom+xml" href="https://raw.githubusercontent.com/MrMairey/autoKernelBuild/main/logbook.xml"/>
+
+<entry>
+	<title>2022-05-06 | Week 2 Term 2</title>
+	<updated>2022-05-06:00:00Z</updated>
+	<published>2022-05-09:00:00Z</published>
+	<content type="html">
+		<![CDATA[
+			<p> Week 2 Term 2 </p>
+<p> On Thursday 5th of May I added a function to obtain the latest kernel version if the user enters nothing in the KERNVER prompt </p>
+<p> On Friday 6th of May I removed the cleaned the code by removing the preMake function which only contained a single command </p>
+<p> Next week I hope to apply bug fixes, add a dependency check, start on the help page and make further progress with documentation </p>
+]]>
+</content>
+</entry>
+
+
 <entry>
 	<title>2022-04-29 | Week 1 Term 2</title>
 	<updated>2022-05-02:00:00Z</updated>
