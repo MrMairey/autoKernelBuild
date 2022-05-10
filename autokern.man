@@ -167,13 +167,16 @@ Conflicts with
 The following programs are required for the script to function:
 .TP
 tar gcc make ld depmod perl bc openssl grub mkinitcpio
+Additionally, other packages are required that may not nessecarily provide commands such as the
+.B linux-headers
+package.
 
 On systems running the
 .B pacman
 package manager, the following command can be run to install all nessecary programs.
 
 .TP
-.B pacman -S base-devel xmlto kmod inetutils bc libelf
+.B pacman -S base-devel xmlto kmod inetutils bc libelf cpio linux-headers
 
 More information can be found at the following link:
 .UR https://www.kernel.org/doc/html/v4.15/process/changes.html
