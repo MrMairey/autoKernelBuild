@@ -173,7 +173,7 @@ On systems running the
 package manager, the following command can be run to install all nessecary programs.
 
 .TP
-.B pacman -S base-devel xmlto kmod inetutils bc libelf git
+.B pacman -S base-devel xmlto kmod inetutils bc libelf
 
 More information can be found at the following link:
 .UR https://www.kernel.org/doc/html/v4.15/process/changes.html
