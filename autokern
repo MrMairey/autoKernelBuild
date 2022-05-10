@@ -3,18 +3,18 @@
 while getopts ":hvsw:" option; do
    case $option in
       h) # display help
-	       cd "$(dirname "$0")"
-	       man -l autokern.man || groff -mandoc autokern.man -T utf8 | less || groff -mandoc autokern.man > autokern.man.pdf
+	       	cd "$(dirname "$0")"
+	       	man -l autokern.man || groff -mandoc autokern.man -T utf8 | less
          exit 0;;
       v) # Verbose
-	      AUTOKERNVERB = v;;
+	    	AUTOKERNVERB = v;;
       s) # Silent
 		VERBAGE=/dev/null;;
       w) # Wget
 		DLCOM="wget -v";;
      \?) # Invalid option
-         echo "Error: Invalid option"
-         exit;;
+     		echo "Error: Invalid option, for more information run 'autokern -h'"
+        	exit;;
    esac
 done
 ### Set a couple variables
@@ -23,16 +23,15 @@ notInstalled()
 	echo "The required programs are not installed, for more information, run 'autokern -h'" ; return 1
 )
 type tar gcc make ld depmod perl bc openssl grub-mkconfig mkinitcpio >> /dev/null || notInstalled || exit;
-export KERNDIR=$HOME\/.cache/autoKern
-export AUTOKERNCONF=$HOME\/.config/autoKern
+[ -z $KERNDIR ] && export KERNDIR=$HOME\/.cache/autokern
+[ -z $AUTOKERNCONF ] && export AUTOKERNCONF=$HOME\/.config/autokern
 mkdir -p $KERNDIR
 mkdir -p $AUTOKERNCONF
-export VERBAGE=/dev/stdout
-export DLCOM="curl -LO"
-export COMPTHREADS=`nproc`
+[ -z $VERBAGE ] && export VERBAGE=/dev/stdout
+[ -z $DLCOM ] && export DLCOM="curl -LO"
+[ -z $COMPTHREADS ] && export COMPTHREADS=`nproc`
 cd $KERNDIR
-echo "Enter a kernel version: "
-read KERNVER
+[ -z $KERNVER ] && echo "Enter a kernel version: " && read KERNVER
 export KERNVER=$KERNVER
 [ -z $KERNVER ] && export KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`
 export KERNPREFIX=`echo $KERNVER | cut -c1`
@@ -55,24 +54,23 @@ vdlSource()
 ### Extract source code
 extractSc()
 (
-	tar -xJf linux-$KERNVER.tar.xz || echo "invalid kernel version"; exit 1
-)
-## Verbose alternative extract
-vextractSc()
-(
-	tar -xvJf linux-$KERNVER.tar.xz || echo "invalid kernel version"; exit 1
+	tar -x$AUTOKERNVERBAGE\Jf linux-$KERNVER.tar.xz || echo "invalid kernel version"; exit 1
 )
 vkernConf()
 (
-	cp -v $AUTOKERNCONF/kernconf .config || zcat /proc/config.gz > .config || make defconfig
+	cp -v $AUTOKERNCONF/kernconf .config || procConf
 	mv -f -v $AUTOKERNCONF/kernconf $AUTOKERNCONF/kernconf.old
 	cp -v .config $AUTOKERNCONF/kernconf
 )
 kernConf()
 (
-	cp $AUTOKERNCONF/kernconf .config || zcat /proc/config.gz > .config || make defconfig
+	cp $AUTOKERNCONF/kernconf .config || procConf
 	mv -f $AUTOKERNCONF/kernconf $AUTOKERNCONF/kernconf.old
 	cp .config $AUTOKERNCONF/kernconf
+)
+procConf()
+(
+[ -f /proc/config.gz ] && zcat /proc/config.gz > .config || make defconfig
 )
 runMake()
 (
@@ -114,8 +112,8 @@ bootloaderUp()
 )
 ### Actually run the code
 echo $KERNDIR $VERBAGE $DLCOM $KERNVER $KERNPREFIX $COUNT $COMPTHREADS
-$AUTOKERNVERB\dlSource
-$AUTOKERNVERV\extractSc
+[ -f linux-$KERNVER.tar.xz ] || $AUTOKERNVERB\dlSource
+extractSc
 cd linux-$KERNVER
 $AUTOKERNVERB\kernConf
 $AUTOKERNVERB\runMake
