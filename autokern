@@ -70,7 +70,7 @@ kernConf()
 )
 procConf()
 (
-[ -f /proc/config.gz ] && zcat /proc/config.gz > .config || make defconfig
+[ -f /proc/config.gz ] && zcat /proc/config.gz > .config || make localmodconfig
 )
 runMake()
 (
