@@ -1,39 +1,51 @@
 #!/bin/sh
+### Set subs
+notInstalled()
+(
+	echo "The required programs are not installed, for more information, run 'autokern -h'" ; return 1
+)
+latestKern()
+(
+export KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`
+)
+
 ### Getopts
-while getopts ":hvsw:" option; do
+while getopts ":hvlwk:" option; do
    case $option in
       h) # display help
 	       	cd "$(dirname "$0")"
 	       	man -l autokern.man || groff -mandoc autokern.man -T utf8 | less
          exit 0;;
+      l) # Latest
+		latestKern;;
       v) # Verbose
 	    	AUTOKERNVERB = v;;
-      s) # Silent
-		VERBAGE=/dev/null;;
+#      s) # Silent
+#		VERBAGE=/dev/null;;
       w) # Wget
-		DLCOM="wget -v";;
+		DLCOM="wget -v"
+		export DLCOM=$DLCOM;;
+      k) #KERNVER spec
+	        KERNVER=$OPTARG
+		export KERNVER=$KERNVER;;
      \?) # Invalid option
      		echo "Error: Invalid option, for more information run 'autokern -h'"
         	exit;;
    esac
 done
-### Set a couple variables
-notInstalled()
-(
-	echo "The required programs are not installed, for more information, run 'autokern -h'" ; return 1
-)
+### Initialise vars
 type tar gcc make ld depmod perl bc openssl grub-mkconfig mkinitcpio >> /dev/null || notInstalled || exit;
 [ -z $KERNDIR ] && export KERNDIR=$HOME\/.cache/autokern
 [ -z $AUTOKERNCONF ] && export AUTOKERNCONF=$HOME\/.config/autokern
 mkdir -p $KERNDIR
 mkdir -p $AUTOKERNCONF
 [ -z $VERBAGE ] && export VERBAGE=/dev/stdout
-[ -z $DLCOM ] && export DLCOM="curl -LO"
+[ -z "$DLCOM" ] && export DLCOM="curl -LO"
 [ -z $COMPTHREADS ] && export COMPTHREADS=`nproc`
 cd $KERNDIR
 [ -z $KERNVER ] && echo "Enter a kernel version: " && read KERNVER
+[ -z $KERNVER ] && latestKern
 export KERNVER=$KERNVER
-[ -z $KERNVER ] && export KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`
 export KERNPREFIX=`echo $KERNVER | cut -c1`
 COUNT=1
 while [ -f /boot/vmlinuz-linux_$KERNVER\_$COUNT ];
@@ -41,21 +53,25 @@ do
 	COUNT=$((COUNT+1))
 done
 export COUNT=$COUNT
+
 ### Get source code
 dlSource()
 (
 	$DLCOM https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz #&>$VERBAGE
 )
+
 ## Verbose download
 vdlSource()
 (
 	$DLCOM\v https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz
 )
+
 ### Extract source code
 extractSc()
 (
 	tar -x$AUTOKERNVERBAGE\Jf linux-$KERNVER.tar.xz || echo "invalid kernel version"; exit 1
 )
+### Kernel confs
 vkernConf()
 (
 	cp -v $AUTOKERNCONF/kernconf .config || procConf
@@ -72,6 +88,8 @@ procConf()
 (
 [ -f /proc/config.gz ] && zcat /proc/config.gz > .config || make localmodconfig
 )
+
+### Make
 runMake()
 (
 	make -j$COMPTHREADS #&>$VERBAGE
@@ -110,6 +128,7 @@ bootloaderUp()
 (
 	[ -f /boot/grub/grub.cfg ] && sudo grub-mkconfig -o /boot/grub/grub.cfg
 )
+
 ### Actually run the code
 echo $KERNDIR $VERBAGE $DLCOM $KERNVER $KERNPREFIX $COUNT $COMPTHREADS
 [ -f linux-$KERNVER.tar.xz ] || $AUTOKERNVERB\dlSource
