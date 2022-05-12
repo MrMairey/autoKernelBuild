@@ -1,14 +1,4 @@
 #!/bin/sh
-### Set subs
-notInstalled()
-(
-	echo "The required programs are not installed, for more information, run 'autokern -h'" ; return 1
-)
-latestKern()
-(
-export KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`
-)
-
 ### Getopts
 while getopts ":hvlwk:" option; do
    case $option in
@@ -17,7 +7,7 @@ while getopts ":hvlwk:" option; do
 	       	man -l autokern.man || groff -mandoc autokern.man -T utf8 | less
          exit 0;;
       l) # Latest
-		latestKern;;
+		KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`;;
       v) # Verbose
 	    	AUTOKERNVERB = v;;
 #      s) # Silent
@@ -33,6 +23,17 @@ while getopts ":hvlwk:" option; do
         	exit;;
    esac
 done
+
+### Set subs
+notInstalled()
+(
+	echo "The required programs are not installed, for more information, run 'autokern -h'" ; return 1
+)
+latestKern()
+(
+KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`
+)
+
 ### Initialise vars
 type tar gcc make ld depmod perl bc openssl grub-mkconfig mkinitcpio >> /dev/null || notInstalled || exit;
 [ -z $KERNDIR ] && export KERNDIR=$HOME\/.cache/autokern
@@ -43,7 +44,7 @@ mkdir -p $AUTOKERNCONF
 [ -z "$DLCOM" ] && export DLCOM="curl -LO"
 [ -z $COMPTHREADS ] && export COMPTHREADS=`nproc`
 cd $KERNDIR
-[ -z $KERNVER ] && echo "Enter a kernel version: " && read KERNVER
+[ -z "$KERNVER" ] && echo "Enter a kernel version: " && read KERNVER
 [ -z $KERNVER ] && latestKern
 export KERNVER=$KERNVER
 export KERNPREFIX=`echo $KERNVER | cut -c1`
