@@ -9,7 +9,7 @@ while getopts ":hvlwk:" option; do
       l) # Latest
 		KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`;;
       v) # Verbose
-	    	AUTOKERNVERB = v;;
+	    	AUTOKERNVERB=v;;
 #      s) # Silent
 #		VERBAGE=/dev/null;;
       w) # Wget
@@ -24,18 +24,8 @@ while getopts ":hvlwk:" option; do
    esac
 done
 
-### Set subs
-notInstalled()
-(
-	echo "The required programs are not installed, for more information, run 'autokern -h'" ; return 1
-)
-latestKern()
-(
-KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`
-)
-
 ### Initialise vars
-type tar gcc make ld depmod perl bc openssl grub-mkconfig mkinitcpio >> /dev/null || notInstalled || exit;
+type tar gcc make ld depmod perl bc openssl grub-mkconfig mkinitcpio >> /dev/null || { echo "The required programs are not installed, for more information, run 'autokern -h'"; exit; }
 [ -z $KERNDIR ] && export KERNDIR=$HOME\/.cache/autokern
 [ -z $AUTOKERNCONF ] && export AUTOKERNCONF=$HOME\/.config/autokern
 mkdir -p $KERNDIR
@@ -45,7 +35,7 @@ mkdir -p $AUTOKERNCONF
 [ -z $COMPTHREADS ] && export COMPTHREADS=`nproc`
 cd $KERNDIR
 [ -z "$KERNVER" ] && echo "Enter a kernel version: " && read KERNVER
-[ -z $KERNVER ] && latestKern
+[ -z $KERNVER ] && KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`
 export KERNVER=$KERNVER
 export KERNPREFIX=`echo $KERNVER | cut -c1`
 COUNT=1
@@ -67,11 +57,6 @@ vdlSource()
 	$DLCOM\v https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz
 )
 
-### Extract source code
-extractSc()
-(
-	tar -x$AUTOKERNVERBAGE\Jf linux-$KERNVER.tar.xz || echo "invalid kernel version"; exit 1
-)
 ### Kernel confs
 vkernConf()
 (
@@ -131,14 +116,14 @@ bootloaderUp()
 )
 
 ### Actually run the code
-echo $KERNDIR $VERBAGE $DLCOM $KERNVER $KERNPREFIX $COUNT $COMPTHREADS
+#echo $KERNDIR $VERBAGE $DLCOM $KERNVER $KERNPREFIX $COUNT $COMPTHREADS
 [ -f linux-$KERNVER.tar.xz ] || $AUTOKERNVERB\dlSource
-extractSc
+tar -x$AUTOKERNVERBAGE\Jf linux-$KERNVER.tar.xz || { echo "invalid kernel version"; exit 1; }
 cd linux-$KERNVER
 $AUTOKERNVERB\kernConf
 $AUTOKERNVERB\runMake
 $AUTOKERNVERB\bzImg
 $AUTOKERNVERB\initMap
 bootloaderUp
-unset AUTOKERNVERB
-exit
+unset AUTOKERNVERB VERBAGE KERNVER DLCOM KERNDIR AUTOKERNCONF VERBAGE DLCOM COMPTHREADS KERNPREFIX COUNT
+exit;
