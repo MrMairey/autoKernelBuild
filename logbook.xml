@@ -6,6 +6,30 @@
 <link rel="self" type="application/atom+xml" href="https://raw.githubusercontent.com/MrMairey/autoKernelBuild/main/logbook.xml"/>
 
 <entry>
+	<title>2022-05-13 | Week 2 Term 3</title>
+	<updated>2022-05-13:00:00Z</updated>
+	<published>2022-05-16:00:00Z</published>
+	<content type="html">
+		<![CDATA[
+		<p> Term 2 Week 3 Log </p>
+<p> On Saturday 7th of May, I fixed various typos as well as removed the functions regarding silent mode as it was causing issues and needed to be revised at a later date. </p>
+
+<p> On Sunday 8th of May, I modified the subprogram names as they were conflicting with sections of code and causing code loops. Additionally, I added the code to update the bootloader and fixed a few typos. </p>
+
+<p> On Monday 9th of May, I added functions to check the system for the necessary dependencies along with a few typos. Later that day, more dependencies were added, more typos were fixed, indents were modified and the getopts (get options) section was moved. Furthermore, I wrote the manual page and added code to interpret it. </p>
+
+<p> On Tuesday 10th of May, the dependency list was updated and the code was given a general clean which found a few typos. Additionally, I set up a virtual machine to test the program in, which will also be used to film the demonstration video. </p>
+
+<p> On Thursday 12th of May bugfixes were applied regarding the getopts section of code, as well as adding the functions to install the latest kernel version or to install a kernel version specified with -k. </p>
+
+<p> On Friday 13th of May, certain areas of code were modified to ensure the program exited when intended, such as at errors. Additionally, portions of code were substituted for subprograms and vice versa. </p>
+
+<p> Next week I hope to make significant progress on documentation, fix the silent function, implement an architecture compatibility check and create the framework for the configuration file. </p>
+]]>
+</content>
+</entry>
+
+<entry>
 	<title>2022-05-06 | Week 2 Term 2</title>
 	<updated>2022-05-06:00:00Z</updated>
 	<published>2022-05-09:00:00Z</published>
