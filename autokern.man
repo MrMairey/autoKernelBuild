@@ -21,11 +21,7 @@ autoKern \- an automation script for the downloading, compilation and installati
 .\" verbose and silent options
 .br
 .B autokern
-{
 .B \-v
-|
-.B \-s
-}
 .RI [\| "options" \|]
 .\" wget option
 .br
@@ -82,11 +78,6 @@ Runs
 .B autokern
 in wget mode, which uses wget for downloads rather than curl.
 .TP
-.BI autokern \ \-s
-Runs
-.B autokern
-with silent output.
-.TP
 .BI autokern \ \-lw
 Runs
 .B autokern
@@ -109,10 +100,8 @@ uses curl to download the kernel source-code unless the
 option is specified, which uses wget for this functionality.
 .TP
 outputs normal outputs unless the
-.B \-s
-option or the
 .B \-v
-option is specified
+option is specified.
 
 .SH OPTIONS
 .SS General options
@@ -125,16 +114,7 @@ with wget as the download program for downloading kernel source-code.
 .BR \-v
 	Run programs within
 .B autokern
-with verbose output. Conflicts with
-.B -s
-\.
-.TP
-.BR \-s
-	Run
-.B autokern
-with silent output. Conflicts with
-.B -v
-\.
+with verbose outputs.
 .TP
 .BR \-l
 	Run
