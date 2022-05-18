@@ -41,7 +41,7 @@ do
 	COUNT=$((COUNT+1))
 done
 export COUNT=$COUNT
-
+export UNAMEM=`uname -m`
 ### Get source code
 dlSource()
 (
@@ -87,12 +87,12 @@ vrunMake()
 ### copy bzImage
 bzImg()
 (
-	sudo cp arch/x86_64/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$COUNT
+	sudo cp arch/$UNAMEM/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$COUNT
 )
 ## Verbose alternative copy bz
 vbzImg()
 (
-	sudo cp -v arch/x86_64/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$COUNT
+	sudo cp -v arch/$UNAMEM/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$COUNT
 )
 ### initramfs & systemmap
 initMap()
@@ -122,5 +122,5 @@ $AUTOKERNVERB\runMake
 $AUTOKERNVERB\bzImg
 $AUTOKERNVERB\initMap
 bootloaderUp
-unset AUTOKERNVERB KERNVER DLCOM KERNDIR AUTOKERNCONF DLCOM COMPTHREADS KERNPREFIX COUNT
+unset AUTOKERNVERB KERNVER DLCOM KERNDIR AUTOKERNCONF DLCOM COMPTHREADS KERNPREFIX COUNT UNAMEM
 exit;
