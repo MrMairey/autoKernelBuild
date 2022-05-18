@@ -10,8 +10,6 @@ while getopts ":hvlwk:" option; do
 		KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`;;
       v) # Verbose
 	    	AUTOKERNVERB=v;;
-#      s) # Silent
-#		VERBAGE=/dev/null;;
       w) # Wget
 		DLCOM="wget -v"
 		export DLCOM=$DLCOM;;
@@ -30,7 +28,6 @@ type tar gcc make ld depmod perl bc openssl grub-mkconfig mkinitcpio >> /dev/nul
 [ -z $AUTOKERNCONF ] && export AUTOKERNCONF=$HOME\/.config/autokern
 mkdir -p $KERNDIR
 mkdir -p $AUTOKERNCONF
-[ -z $VERBAGE ] && export VERBAGE=/dev/stdout
 [ -z "$DLCOM" ] && export DLCOM="curl -LO"
 [ -z $COMPTHREADS ] && export COMPTHREADS=`nproc`
 cd $KERNDIR
@@ -48,7 +45,7 @@ export COUNT=$COUNT
 ### Get source code
 dlSource()
 (
-	$DLCOM https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz #&>$VERBAGE
+	$DLCOM https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz
 )
 
 ## Verbose download
@@ -78,8 +75,8 @@ procConf()
 ### Make
 runMake()
 (
-	make -j$COMPTHREADS #&>$VERBAGE
-	sudo make modules_install #&>$VERBAGE
+	make -j$COMPTHREADS
+	sudo make modules_install
 )
 ## Verbose alternative make
 vrunMake()
@@ -100,7 +97,7 @@ vbzImg()
 ### initramfs & systemmap
 initMap()
 (
-	sudo mkinitcpio -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT.img #&>$VERBAGE
+	sudo mkinitcpio -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT.img
 	sudo cp System.map /boot/System.map-linux_$KERNVER\_$COUNT
 )
 ## Verbose alternative initramfs & systemmap
@@ -125,5 +122,5 @@ $AUTOKERNVERB\runMake
 $AUTOKERNVERB\bzImg
 $AUTOKERNVERB\initMap
 bootloaderUp
-unset AUTOKERNVERB VERBAGE KERNVER DLCOM KERNDIR AUTOKERNCONF VERBAGE DLCOM COMPTHREADS KERNPREFIX COUNT
+unset AUTOKERNVERB KERNVER DLCOM KERNDIR AUTOKERNCONF DLCOM COMPTHREADS KERNPREFIX COUNT
 exit;
