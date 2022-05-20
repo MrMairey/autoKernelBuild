@@ -33,7 +33,7 @@ createConfig()
 cd "$(dirname "$0")"
 cp config.example $AUTOKERNCONF/config
 )
-[ -f $AUTOKERNCONF/config ] || createConfig && sh $AUTOKERNCONF/config
+[ -f $AUTOKERNCONF/config ] || createConfig && . $AUTOKERNCONF/config
 [ -z "$DLCOM" ] && export DLCOM="curl -LO"
 [ -z $COMPTHREADS ] && export COMPTHREADS=`nproc`
 cd $KERNDIR
