@@ -28,6 +28,12 @@ type tar gcc make ld depmod perl bc openssl grub-mkconfig mkinitcpio >> /dev/nul
 [ -z $AUTOKERNCONF ] && export AUTOKERNCONF=$HOME\/.config/autokern
 mkdir -p $KERNDIR
 mkdir -p $AUTOKERNCONF
+createConfig()
+(
+cd "$(dirname "$0")"
+cp config.example $AUTOKERNCONF/config
+)
+[ -f $AUTOKERNCONF/config ] || createConfig && sh $AUTOKERNCONF/config
 [ -z "$DLCOM" ] && export DLCOM="curl -LO"
 [ -z $COMPTHREADS ] && export COMPTHREADS=`nproc`
 cd $KERNDIR
@@ -113,7 +119,6 @@ bootloaderUp()
 )
 
 ### Actually run the code
-#echo $KERNDIR $VERBAGE $DLCOM $KERNVER $KERNPREFIX $COUNT $COMPTHREADS
 [ -f linux-$KERNVER.tar.xz ] || $AUTOKERNVERB\dlSource
 tar -x$AUTOKERNVERB\Jf linux-$KERNVER.tar.xz || { echo "invalid kernel version"; exit 1; }
 cd linux-$KERNVER

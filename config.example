@@ -1,0 +1,6 @@
+#export KERNDIR=$HOME\/.cache/autokern
+#export DLCOM="curl -LO
+#export COMPTHREADS=`nproc`
+#export KERNVER=""
+#export AUTOKERNVERB=""
+#export AUTOKERKCONF=$HOME\/.config/autokern
