@@ -1,14 +1,29 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
 <title type="text">34544506 autoKernelBuildLogbook</title>
-<updated>2022-05-13T12:00:00Z</updated>
+<updated>2022-05-23T12:00:00Z</updated>
 <link rel="alternate" type="text/html" href="https://raw.githubusercontent.com/MrMairey/autoKernelBuild/main/logbook.xml"/>
 <id>https://raw.githubusercontent.com/MrMairey/autoKernelBuild/main/logbook.xml</id>
 <link rel="self" type="application/atom+xml" href="https://raw.githubusercontent.com/MrMairey/autoKernelBuild/main/logbook.xml"/>
 
 <entry>
+	<title>2022-05-20 | Week 4 Term 2</title>
+	<updated>2022-05-20T00:00:00Z</updated>
+	<published>2022-05-23T00:00:00Z</published>
+	<content type="html">
+		<![CDATA[
+		<p> Term 2 Week 4 Log </p>
+<p> On Tuesday 17th of May I fixed a typo which prevented the verbose mode function from running. </p>
+<p> On Wednesday 18th of May I removed the code for the commented code for silent mode as it was not functioning as intended. Additionally, the documentation for silent mode in the manual page was removed accordingly. I also implemented code to detect the user's system architecture (x86, arm64 etc) and install the correct kernel, as previously the program was limited to installing a kernel for the x86_64 architecture. </p>
+<p> On Friday 20th of May I added a function to create and read a configuration file for the program, as well as creating an example configuration file. </p>
+<p> Next week I hope to make significant progress on documentation. </p>
+]]>
+</content>
+</entry>
+
+<entry>
 	<title>2022-05-13 | Week 3 Term 2</title>
-	<updated>2022-05-13:00:00Z</updated>
-	<published>2022-05-16:00:00Z</published>
+	<updated>2022-05-13T00:00:00Z</updated>
+	<published>2022-05-16T00:00:00Z</published>
 	<content type="html">
 		<![CDATA[
 		<p> Term 2 Week 3 Log </p>
@@ -25,8 +40,8 @@
 
 <entry>
 	<title>2022-05-06 | Week 2 Term 2</title>
-	<updated>2022-05-06:00:00Z</updated>
-	<published>2022-05-09:00:00Z</published>
+	<updated>2022-05-06T00:00:00Z</updated>
+	<published>2022-05-09T00:00:00Z</published>
 	<content type="html">
 		<![CDATA[
 			<p> Week 2 Term 2 </p>
@@ -40,8 +55,8 @@
 
 <entry>
 	<title>2022-04-29 | Week 1 Term 2</title>
-	<updated>2022-05-02:00:00Z</updated>
-	<published>2022-05-02:00:00Z</published>
+	<updated>2022-05-02T00:00:00Z</updated>
+	<published>2022-05-02T00:00:00Z</published>
 	<content type="html">
 		<![CDATA[
 		<p> Week 1 Term 2</p>
@@ -56,8 +71,8 @@
 
 <entry>
 	<title>2022-04-22 | Holiday Week 2</title>
-	<updated>2022-04-25:00:00Z</updated>
-	<published>2022-04-25:00:00Z</published>
+	<updated>2022-04-25T00:00:00Z</updated>
+	<published>2022-04-25T00:00:00Z</published>
 	<content type="html">
 		<![CDATA[
 		<p> Holiday Week 2 Logbook Post</p>
@@ -71,8 +86,8 @@
 
 <entry>
 	<title>2022-04-15 | Holiday Week 1</title>
-	<updated>2022-04-18:00:00Z</updated>
-	<published>2022-04-19:00:00Z</published>
+	<updated>2022-04-18T00:00:00Z</updated>
+	<published>2022-04-19T00:00:00Z</published>
 	<content type="html">
 		<![CDATA[
 		<p> Holiday Week 1 Logbook Post</p>
@@ -84,8 +99,8 @@
 
 <entry>
 	<title>2022-04-08 | Week 11</title>
-	<updated>2022-04-11:00:00Z</updated>
-	<published>2022-04-12:00:00Z</published>
+	<updated>2022-04-11T00:00:00Z</updated>
+	<published>2022-04-12T00:00:00Z</published>
 	<content type="html">
 		<![CDATA[
 		<p> Week 11 Logbook Post</p>
@@ -97,8 +112,8 @@
 </entry>
 <entry>
 	<title>2022-04-01 | Week 10</title>
-	<updated>2022-04-04:00:00Z</updated>
-	<published>2022-04-04:00:00Z</published>
+	<updated>2022-04-04T00:00:00Z</updated>
+	<published>2022-04-04T00:00:00Z</published>
 	<content type="html">
 		<![CDATA[
 	<p> On Wednesday 30th of March I made further progress on associated documentation. </p>
@@ -108,8 +123,8 @@
 </entry>
 <entry>
 	<title>2022-03-25 | Week 9</title>
-	<updated>2022-03-25:00:00Z</updated>
-	<published>2022-03-28:00:00Z</published>
+	<updated>2022-03-25T00:00:00Z</updated>
+	<published>2022-03-28T00:00:00Z</published>
 	<content type="html">
 		<![CDATA[
 <p> Week 9 Logbook Post </p>
@@ -121,8 +136,8 @@
 </entry>
 <entry>
 	<title>2022-03-18 | Week 8</title>
-	<updated>2022-03-18:00:00Z</updated>
-	<published>2022-03-21:00:00Z</published>
+	<updated>2022-03-18T00:00:00Z</updated>
+	<published>2022-03-21T00:00:00Z</published>
 	<content type="html">
 		<![CDATA[
 <p> Week 8 Log </p>
@@ -135,8 +150,8 @@
 </entry>
 <entry>
 <title>2022-03-11 | Week 7</title>
-<updated>2022-03-11:00:00Z</updated>
-<published>2022-03-14:00:00Z</published>
+<updated>2022-03-11T00:00:00Z</updated>
+<published>2022-03-14T00:00:00Z</published>
 <content type="html">
 	<![CDATA[ <p> Fifth logbook post </p>
 <p> Week 7 Log </p>
