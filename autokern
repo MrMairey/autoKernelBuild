@@ -37,7 +37,7 @@ cp config.example $AUTOKERNCONF/config
 [ -z "$DLCOM" ] && export DLCOM="curl -LO"
 [ -z $COMPTHREADS ] && export COMPTHREADS=`nproc`
 cd $KERNDIR
-[ -z "$KERNVER" ] && echo "Enter a kernel version: " && read KERNVER
+[ -z "$KERNVER" ] && read -p "Enter a kernel version:" KERNVER
 [ -z $KERNVER ] && KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`
 export KERNVER=$KERNVER
 export KERNPREFIX=`echo $KERNVER | cut -c1`
@@ -112,20 +112,21 @@ vinitMap()
 	sudo mkinitcpio -v -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT.img
 	sudo cp -v System.map /boot/System.map-linux_$KERNVER\_$COUNT
 )
-## Update bootloader
-bootloaderUp()
-(
-	[ -f /boot/grub/grub.cfg ] && sudo grub-mkconfig -o /boot/grub/grub.cfg
-)
 
 ### Actually run the code
 [ -f linux-$KERNVER.tar.xz ] || $AUTOKERNVERB\dlSource
 tar -x$AUTOKERNVERB\Jf linux-$KERNVER.tar.xz || { echo "invalid kernel version"; exit 1; }
 cd linux-$KERNVER
 $AUTOKERNVERB\kernConf
+## Modify config
+read -p "Are you sure? [y/N] " response
+case $response in [yY][eE][sS]|[yY]|[yY][eE])
+	make menuconfig;;
+esac
 $AUTOKERNVERB\runMake
 $AUTOKERNVERB\bzImg
 $AUTOKERNVERB\initMap
-bootloaderUp
+## Update bootloader
+[ -f /boot/grub/grub.cfg ] && sudo grub-mkconfig -o /boot/grub/grub.cfg
 unset AUTOKERNVERB KERNVER DLCOM KERNDIR AUTOKERNCONF DLCOM COMPTHREADS KERNPREFIX COUNT UNAMEM
 exit;
