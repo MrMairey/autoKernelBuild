@@ -41,12 +41,11 @@ cd $KERNDIR
 [ -z $KERNVER ] && KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`
 export KERNVER=$KERNVER
 export KERNPREFIX=`echo $KERNVER | cut -c1`
-COUNT=1
-while [ -f /boot/vmlinuz-linux_$KERNVER\_$COUNT ];
+[ -z "$KERNSUFFIX" ] KERNSUFFIX=1
+while [ -f /boot/vmlinuz-linux_$KERNVER\_$KERNSUFFIX ];
 do
-	COUNT=$((COUNT+1))
+	export KERNSUFFIX=$((KERNSUFFIX+1))
 done
-export COUNT=$COUNT
 export UNAMEM=`uname -m`
 ### Get source code
 dlSource()
@@ -93,24 +92,24 @@ vrunMake()
 ### copy bzImage
 bzImg()
 (
-	sudo cp arch/$UNAMEM/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$COUNT
+	sudo cp arch/$UNAMEM/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$KERNSUFFIX
 )
 ## Verbose alternative copy bz
 vbzImg()
 (
-	sudo cp -v arch/$UNAMEM/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$COUNT
+	sudo cp -v arch/$UNAMEM/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$KERNSUFFIX
 )
 ### initramfs & systemmap
 initMap()
 (
-	sudo mkinitcpio -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT.img
-	sudo cp System.map /boot/System.map-linux_$KERNVER\_$COUNT
+	sudo mkinitcpio -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$KERNSUFFIX.img
+	sudo cp System.map /boot/System.map-linux_$KERNVER\_$KERNSUFFIX
 )
 ## Verbose alternative initramfs & systemmap
 vinitMap()
 (
-	sudo mkinitcpio -v -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$COUNT.img
-	sudo cp -v System.map /boot/System.map-linux_$KERNVER\_$COUNT
+	sudo mkinitcpio -v -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$KERNSUFFIX.img
+	sudo cp -v System.map /boot/System.map-linux_$KERNVER\_$KERNSUFFIX
 )
 
 ### Actually run the code

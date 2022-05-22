@@ -189,6 +189,9 @@ option.
 .TP
 .B AUTOKERNCONF
 Defines the directory location where the program's configuration file is stored, as well as the kernel .config file and backup.
+.TP
+.B KERNSUFFIX
+Determines the suffix for kernel files to prevent overwriting of existing installed kernels matching the version of KERNVER.
 
 .SH FILES
 .TP

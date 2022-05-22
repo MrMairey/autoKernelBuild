@@ -4,3 +4,4 @@
 #export KERNVER=""
 #export AUTOKERNVERB=""
 #export AUTOKERKCONF=$HOME\/.config/autokern
+#export KERNSUFFIX=1
