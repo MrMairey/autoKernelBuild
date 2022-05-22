@@ -128,5 +128,4 @@ $AUTOKERNVERB\bzImg
 $AUTOKERNVERB\initMap
 ## Update bootloader
 [ -f /boot/grub/grub.cfg ] && sudo grub-mkconfig -o /boot/grub/grub.cfg
-unset AUTOKERNVERB KERNVER DLCOM KERNDIR AUTOKERNCONF DLCOM COMPTHREADS KERNPREFIX COUNT UNAMEM
 exit;
