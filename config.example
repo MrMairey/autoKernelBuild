@@ -1,3 +1,4 @@
+### for more information regarding the following options consult the manual with `autokern -h`
 #export KERNDIR=$HOME\/.cache/autokern
 #export DLCOM="curl -LO
 #export COMPTHREADS=`nproc`

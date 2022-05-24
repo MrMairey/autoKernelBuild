@@ -183,7 +183,7 @@ Determines the number of CPU threads used to compile the kernel, by default is s
 The version number of the kernel as specified by the user when prompted or from options.
 .TP
 .B AUTOKERNVERB
-When declared as "v", the program runs code with verbose flags. The same as passing the
+When declared the program runs code with verbose flags. The same as passing the
 .B -v
 option.
 .TP
