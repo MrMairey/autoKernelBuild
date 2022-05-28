@@ -47,7 +47,7 @@ do
 	export KERNSUFFIX=$((KERNSUFFIX+1))
 done
 export UNAMEM=`uname -m`
-[ -z $AUTOKERNVERB ] && export AUTOKERNVERB="v"
+[ -z $AUTOKERNVERB ] || export AUTOKERNVERB="v"
 
 ### Get source code
 dlSource()
