@@ -37,7 +37,7 @@ cp config.example $AUTOKERNCONF/config
 [ -z "$DLCOM" ] && export DLCOM="curl -LO"
 [ -z $COMPTHREADS ] && export COMPTHREADS=`nproc`
 cd $KERNDIR
-[ -z "$KERNVER" ] && read -p "Enter a kernel version:" KERNVER
+[ -z "$KERNVER" ] && read -p "Enter a kernel version: " KERNVER
 [ -z $KERNVER ] && KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`
 export KERNVER=$KERNVER
 export KERNPREFIX=`echo $KERNVER | cut -c1`
@@ -120,7 +120,7 @@ tar -x$AUTOKERNVERB\Jf linux-$KERNVER.tar.xz || { echo "invalid kernel version";
 cd linux-$KERNVER
 $AUTOKERNVERB\kernConf
 ## Modify config
-read -p "Would you like to the kernel config? [y/N] " response
+read -p "Would you like to modify the kernel config? [y/N] " response
 case $response in [yY][eE][sS]|[yY]|[yY][eE])
 	make menuconfig;;
 esac
