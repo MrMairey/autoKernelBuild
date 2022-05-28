@@ -41,13 +41,14 @@ cd $KERNDIR
 [ -z $KERNVER ] && KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`
 export KERNVER=$KERNVER
 export KERNPREFIX=`echo $KERNVER | cut -c1`
-[ -z "$KERNSUFFIX" ] KERNSUFFIX=1
+[ -z "$KERNSUFFIX" ] && KERNSUFFIX=1
 while [ -f /boot/vmlinuz-linux_$KERNVER\_$KERNSUFFIX ];
 do
 	export KERNSUFFIX=$((KERNSUFFIX+1))
 done
 export UNAMEM=`uname -m`
-[ -z $AUTOKERNVERB ] && export $AUTOKERNVERB=v
+[ -z $AUTOKERNVERB ] && export $AUTOKERNVERB="v"
+
 ### Get source code
 dlSource()
 (
