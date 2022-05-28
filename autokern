@@ -120,7 +120,7 @@ tar -x$AUTOKERNVERB\Jf linux-$KERNVER.tar.xz || { echo "invalid kernel version";
 cd linux-$KERNVER
 $AUTOKERNVERB\kernConf
 ## Modify config
-read -p "Are you sure? [y/N] " response
+read -p "Would you like to the kernel config? [y/N] " response
 case $response in [yY][eE][sS]|[yY]|[yY][eE])
 	make menuconfig;;
 esac
