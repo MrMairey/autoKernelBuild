@@ -49,7 +49,7 @@ file by writing it to
 is a program that automates the process of downloading, compiling and installing a linux kernel.
 The program allows a user to pass a kernel version and the program will download the source-code from the
 .UL kernel.org
-website, extract the source-code, apply a user-supplied configuration, compile and install the kernel, minimizing unnessecary user interactions. The program also provides the ability to download the latest stable mainline kernel for installation. Functionality includes a verbose mode for debugging purposes.
+website, extract the source-code, apply a user-supplied configuration, compile and install the kernel, minimizing unnecessary user interactions. The program also provides the ability to download the latest stable mainline kernel for installation. Functionality includes a verbose mode for debugging purposes.
 
 .SH EXAMPLES
 .TP \w'autokern\ 'u
