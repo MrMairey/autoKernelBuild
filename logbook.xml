@@ -1,9 +1,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
 <title type="text">34544506 autoKernelBuildLogbook</title>
-<updated>2022-05-27T00:00:00Z</updated>
+<updated>2022-06-01T:00:00Z</updated>
 <link rel="alternate" type="text/html" href="https://raw.githubusercontent.com/MrMairey/autoKernelBuild/main/logbook.xml"/>
 <id>https://raw.githubusercontent.com/MrMairey/autoKernelBuild/main/logbook.xml</id>
 <link rel="self" type="application/atom+xml" href="https://raw.githubusercontent.com/MrMairey/autoKernelBuild/main/logbook.xml"/>
+
+<entry>
+	<title>2022-06-01 | Week 6 Term 2</title>
+	<updated>2022-06-01T00:00:00Z</updated>
+	<published>2022-06-01T00:00:00Z</published>
+	<content type="html">
+		<![CDATA[
+		<p> Term 2 Week 6 Log (The finale) </p>
+<p> On Saturday 28th of May I fixed various typos and recorded, edited and uploaded the demonstration video of the program. </p>
+<p> On Sunday 29th of May I fixed a typo and removed documentation regarding the silent mode from the manual page. Additionally, I made significant progress on the documentation and the test report. </p>
+<p> On Monday 30th of May I made slight adjustments to documentation and updated the README file. Additionally, I made some final tweaks to clean up code. </p>
+<p> On Wednesday 1st of July I wrote the final logbook post and handed in the assessment. </p>
+	]]>
+</content>
+</entry>
 
 <entry>
 	<title>2022-05-27 | Week 5 Term 2</title>
