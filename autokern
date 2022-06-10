@@ -4,7 +4,7 @@ while getopts ":hvlwk:" option; do
    case $option in
       h) # display help
 	       	cd "$(dirname "$0")"
-	       	man -l autokern.man || groff -mandoc autokern.man -T utf8 | less
+	       	man autokern || man -l autokern.man || groff -mandoc autokern.man -T utf8 | less
          exit 0;;
       l) # Latest
 		KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`;;
