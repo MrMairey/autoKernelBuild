@@ -12,10 +12,10 @@ while getopts ":hvlwk:" option; do
 	    	AUTOKERNVERB=v;;
       w) # Wget
 		DLCOM="wget -v"
-		export DLCOM="$DLCOM";;
+		export DLCOM;;
       k) #KERNVER spec
 	        KERNVER=$OPTARG
-		export KERNVER="$KERNVER";;
+		export KERNVER;;
      \?) # Invalid option
      		echo "Error: Invalid option, for more information run 'autokern -h'"
         	exit;;
@@ -24,24 +24,26 @@ done
 
 ### Initialise vars
 type tar gcc make ld depmod perl bc openssl grub-mkconfig mkinitcpio >> /dev/null || { echo "The required programs are not installed, for more information, run 'autokern -h'"; exit; }
-[ -z "$KERNDIR" ] && export KERNDIR="$HOME"/.cache/autokern
-[ -z "$AUTOKERNCONF" ] && export AUTOKERNCONF="$HOME"/.config/autokern
+[ -z "$KERNDIR" ] && KERNDIR="$HOME"/.cache/autokern && export KERNDIR
+[ -z "$AUTOKERNCONF" ] && AUTOKERNCONF="$HOME"/.config/autokern && export AUTOKERNCONF
 mkdir -p "$KERNDIR"
 mkdir -p "$AUTOKERNCONF"
 [ ! -f "$AUTOKERNCONF"/config ] && cd "$(dirname "$0")" && cp config.example "$AUTOKERNCONF"/config && . "$AUTOKERNCONF"/config || return
-[ -z "$DLCOM" ] && export DLCOM="curl -LO"
-[ -z "$COMPTHREADS" ] && export COMPTHREADS="$(nproc)"
+[ -z "$DLCOM" ] && DLCOM="curl -LO" && export DLCOM
+[ -z "$COMPTHREADS" ] && COMPTHREADS="$(nproc)" && export COMPTHREADS
 cd "$KERNDIR" || return
 [ -z "$KERNVER" ] && read -p "Enter a kernel version: " KERNVER
 [ -z "$KERNVER" ] && KERNVER=$(curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)')
-export KERNVER="$KERNVER"
-export KERNPREFIX="$(echo "$KERNVER" | cut -c1)"
+export KERNVER
+KERNPREFIX="$(echo "$KERNVER" | cut -c1)"
+export KERNPREFIX
 [ -z "$KERNSUFFIX" ] && KERNSUFFIX=1
 while [ -f /boot/vmlinuz-linux_"$KERNVER"_"$KERNSUFFIX" ];
 do
 	export KERNSUFFIX=$((KERNSUFFIX+1))
 done
-export UNAMEM="$(uname -m)"
+UNAMEM="$(uname -m)"
+export UMAMEM
 [ ! -z "$AUTOKERNVERB" ] && export AUTOKERNVERB="v"
 
 ### Get source code
