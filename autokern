@@ -7,7 +7,7 @@ while getopts ":hvlwk:" option; do
 	       	man autokern || man -l autokern.man || groff -mandoc autokern.man -T utf8 | less
          exit 0;;
       l) # Latest
-		KERNVER=$(curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)');;
+		KERNVER="$(curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)')";;
       v) # Verbose
 	    	AUTOKERNVERB=v;;
       w) # Wget
@@ -30,18 +30,18 @@ mkdir -p "$KERNDIR"
 mkdir -p "$AUTOKERNCONF"
 [ ! -f "$AUTOKERNCONF"/config ] && cd "$(dirname "$0")" && cp config.example "$AUTOKERNCONF"/config && . "$AUTOKERNCONF"/config || return
 [ -z "$DLCOM" ] && export DLCOM="curl -LO"
-[ -z "$COMPTHREADS" ] && export COMPTHREADS=$(nproc)
+[ -z "$COMPTHREADS" ] && export COMPTHREADS="$(nproc)"
 cd "$KERNDIR" || return
 [ -z "$KERNVER" ] && read -p "Enter a kernel version: " KERNVER
 [ -z "$KERNVER" ] && KERNVER=$(curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)')
 export KERNVER="$KERNVER"
-export KERNPREFIX=$(echo "$KERNVER" | cut -c1)
+export KERNPREFIX="$(echo "$KERNVER" | cut -c1)"
 [ -z "$KERNSUFFIX" ] && KERNSUFFIX=1
 while [ -f /boot/vmlinuz-linux_"$KERNVER"_"$KERNSUFFIX" ];
 do
 	export KERNSUFFIX=$((KERNSUFFIX+1))
 done
-export UNAMEM=$(uname -m)
+export UNAMEM="$(uname -m)"
 [ ! -z "$AUTOKERNVERB" ] && export AUTOKERNVERB="v"
 
 ### Get source code
