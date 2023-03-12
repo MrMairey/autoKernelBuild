@@ -12,10 +12,10 @@ while getopts ":hvlwk:" option; do
 	    	AUTOKERNVERB=v;;
       w) # Wget
 		DLCOM="wget -v"
-		export DLCOM=$DLCOM;;
+		export DLCOM="$DLCOM";;
       k) #KERNVER spec
 	        KERNVER=$OPTARG
-		export KERNVER=$KERNVER;;
+		export KERNVER="$KERNVER";;
      \?) # Invalid option
      		echo "Error: Invalid option, for more information run 'autokern -h'"
         	exit;;
@@ -24,50 +24,50 @@ done
 
 ### Initialise vars
 type tar gcc make ld depmod perl bc openssl grub-mkconfig mkinitcpio >> /dev/null || { echo "The required programs are not installed, for more information, run 'autokern -h'"; exit; }
-[ -z $KERNDIR ] && export KERNDIR=$HOME\/.cache/autokern
-[ -z $AUTOKERNCONF ] && export AUTOKERNCONF=$HOME\/.config/autokern
-mkdir -p $KERNDIR
-mkdir -p $AUTOKERNCONF
-[ ! -f $AUTOKERNCONF/config ] && cd "$(dirname "$0")" && cp config.example $AUTOKERNCONF/config && . $AUTOKERNCONF/config || return
+[ -z "$KERNDIR" ] && export KERNDIR="$HOME"\/.cache/autokern
+[ -z "$AUTOKERNCONF" ] && export AUTOKERNCONF="$HOME"\/.config/autokern
+mkdir -p "$KERNDIR"
+mkdir -p "$AUTOKERNCONF"
+[ ! -f "$AUTOKERNCONF"/config ] && cd "$(dirname "$0")" && cp config.example "$AUTOKERNCONF"/config && . "$AUTOKERNCONF"/config || return
 [ -z "$DLCOM" ] && export DLCOM="curl -LO"
-[ -z $COMPTHREADS ] && export COMPTHREADS=`nproc`
-cd $KERNDIR || return
+[ -z "$COMPTHREADS "] && export COMPTHREADS=`nproc`
+cd "$KERNDIR" || return
 [ -z "$KERNVER" ] && read -p "Enter a kernel version: " KERNVER
-[ -z $KERNVER ] && KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`
-export KERNVER=$KERNVER
-export KERNPREFIX=`echo $KERNVER | cut -c1`
+[ -z "$KERNVER" ] && KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`
+export KERNVER="$KERNVER"
+export KERNPREFIX=`echo "$KERNVER" | cut -c1`
 [ -z "$KERNSUFFIX" ] && KERNSUFFIX=1
-while [ -f /boot/vmlinuz-linux_$KERNVER\_$KERNSUFFIX ];
+while [ -f /boot/vmlinuz-linux_"$KERNVER"\_"$KERNSUFFIX" ];
 do
 	export KERNSUFFIX=$((KERNSUFFIX+1))
 done
 export UNAMEM=`uname -m`
-[ ! -z $AUTOKERNVERB ] && export AUTOKERNVERB="v"
+[ ! -z "$AUTOKERNVERB" ] && export AUTOKERNVERB="v"
 
 ### Get source code
 dlSource()
 (
-	$DLCOM https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz
+	"$DLCOM" https://cdn.kernel.org/pub/linux/kernel/v"$KERNPREFIX".x/linux-"$KERNVER".tar.xz
 )
 
 ## Verbose download
 vdlSource()
 (
-	$DLCOM\v https://cdn.kernel.org/pub/linux/kernel/v$KERNPREFIX.x/linux-$KERNVER.tar.xz
+	"$DLCOM"\v https://cdn.kernel.org/pub/linux/kernel/v"$KERNPREFIX".x/linux-"$KERNVER".tar.xz
 )
 
 ### Kernel confs
 vkernConf()
 (
-	cp -v $AUTOKERNCONF/kernconf .config || procConf
-	mv -f -v $AUTOKERNCONF/kernconf $AUTOKERNCONF/kernconf.old
-	cp -v .config $AUTOKERNCONF/kernconf
+	cp -v "$AUTOKERNCONF"/kernconf .config || procConf
+	mv -f -v "$AUTOKERNCONF"/kernconf "$AUTOKERNCONF"/kernconf.old
+	cp -v .config "$AUTOKERNCONF"/kernconf
 )
 kernConf()
 (
-	cp $AUTOKERNCONF/kernconf .config || procConf
-	mv -f $AUTOKERNCONF/kernconf $AUTOKERNCONF/kernconf.old
-	cp .config $AUTOKERNCONF/kernconf
+	cp "$AUTOKERNCONF"/kernconf .config || procConf
+	mv -f "$AUTOKERNCONF"/kernconf "$AUTOKERNCONF"/kernconf.old
+	cp .config "$AUTOKERNCONF"/kernconf
 )
 procConf()
 (
@@ -77,51 +77,51 @@ procConf()
 ### Make
 runMake()
 (
-	make -j$COMPTHREADS
+	make -j"$COMPTHREADS"
 	sudo make modules_install
 )
 ## Verbose alternative make
 vrunMake()
 (
-	make --debug=v -j$COMPTHREADS
-	sudo make --debug=v -j$COMPTHREADS modules_install
+	make --debug=v -j"$COMPTHREADS"
+	sudo make --debug=v -j"$COMPTHREADS" modules_install
 )
 ### copy bzImage
 bzImg()
 (
-	sudo cp arch/$UNAMEM/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$KERNSUFFIX
+	sudo cp arch/"$UNAMEM"/boot/bzImage /boot/vmlinuz-linux_"$KERNVER"\_"$KERNSUFFIX"
 )
 ## Verbose alternative copy bz
 vbzImg()
 (
-	sudo cp -v arch/$UNAMEM/boot/bzImage /boot/vmlinuz-linux_$KERNVER\_$KERNSUFFIX
+	sudo cp -v arch/"$UNAMEM"/boot/bzImage /boot/vmlinuz-linux_"$KERNVER"\_"$KERNSUFFIX"
 )
 ### initramfs & systemmap
 initMap()
 (
-	sudo mkinitcpio -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$KERNSUFFIX.img
-	sudo cp System.map /boot/System.map-linux_$KERNVER\_$KERNSUFFIX
+	sudo mkinitcpio -k "$KERNVER" -g /boot/initramfs-linux_"$KERNVER"\_"$KERNSUFFIX".img
+	sudo cp System.map /boot/System.map-linux_"$KERNVER"\_"$KERNSUFFIX"
 )
 ## Verbose alternative initramfs & systemmap
 vinitMap()
 (
-	sudo mkinitcpio -v -k $KERNVER -g /boot/initramfs-linux_$KERNVER\_$KERNSUFFIX.img
-	sudo cp -v System.map /boot/System.map-linux_$KERNVER\_$KERNSUFFIX
+	sudo mkinitcpio -v -k "$KERNVER" -g /boot/initramfs-linux_"$KERNVER"\_"$KERNSUFFIX".img
+	sudo cp -v System.map /boot/System.map-linux_"$KERNVER"\_"$KERNSUFFIX"
 )
 
 ### Actually run the code
-[ ! -f linux-$KERNVER.tar.xz ] && $AUTOKERNVERB\dlSource
-tar -x$AUTOKERNVERB\Jf linux-$KERNVER.tar.xz || { echo "invalid kernel version"; exit 1; }
-cd linux-$KERNVER || return
-$AUTOKERNVERB\kernConf
+[ ! -f linux-"$KERNVER".tar.xz ] && "$AUTOKERNVERB"\dlSource
+tar -x"$AUTOKERNVERB"\Jf linux-"$KERNVER".tar.xz || { echo "invalid kernel version"; exit 1; }
+cd linux-"$KERNVER" || return
+"$AUTOKERNVERB"\kernConf
 ## Modify config
 read -p "Would you like to modify the kernel config? [y/N] " response
 case $response in [yY][eE][sS]|[yY]|[yY][eE])
 	make menuconfig;;
 esac
-$AUTOKERNVERB\runMake
-$AUTOKERNVERB\bzImg
-$AUTOKERNVERB\initMap
+"$AUTOKERNVERB"\runMake
+"$AUTOKERNVERB"\bzImg
+"$AUTOKERNVERB"\initMap
 ## Update bootloader
 [ -f /boot/grub/grub.cfg ] && sudo grub-mkconfig -o /boot/grub/grub.cfg
 exit;
