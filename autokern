@@ -30,7 +30,7 @@ mkdir -p "$KERNDIR"
 mkdir -p "$AUTOKERNCONF"
 [ ! -f "$AUTOKERNCONF"/config ] && cd "$(dirname "$0")" && cp config.example "$AUTOKERNCONF"/config && . "$AUTOKERNCONF"/config || return
 [ -z "$DLCOM" ] && export DLCOM="curl -LO"
-[ -z "$COMPTHREADS "] && export COMPTHREADS=`nproc`
+[ -z "$COMPTHREADS" ] && export COMPTHREADS=`nproc`
 cd "$KERNDIR" || return
 [ -z "$KERNVER" ] && read -p "Enter a kernel version: " KERNVER
 [ -z "$KERNVER" ] && KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`
