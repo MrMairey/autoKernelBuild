@@ -3,7 +3,7 @@
 while getopts ":hvlwk:" option; do
    case $option in
       h) # display help
-	       	cd "$(dirname "$0")"
+	       	cd "$(dirname "$0")" || return
 	       	man autokern || man -l autokern.man || groff -mandoc autokern.man -T utf8 | less
          exit 0;;
       l) # Latest
@@ -28,10 +28,10 @@ type tar gcc make ld depmod perl bc openssl grub-mkconfig mkinitcpio >> /dev/nul
 [ -z $AUTOKERNCONF ] && export AUTOKERNCONF=$HOME\/.config/autokern
 mkdir -p $KERNDIR
 mkdir -p $AUTOKERNCONF
-[ ! -f $AUTOKERNCONF/config ] && cd "$(dirname "$0")" && cp config.example $AUTOKERNCONF/config && . $AUTOKERNCONF/config
+[ ! -f $AUTOKERNCONF/config ] && cd "$(dirname "$0")" && cp config.example $AUTOKERNCONF/config && . $AUTOKERNCONF/config || return
 [ -z "$DLCOM" ] && export DLCOM="curl -LO"
 [ -z $COMPTHREADS ] && export COMPTHREADS=`nproc`
-cd $KERNDIR
+cd $KERNDIR || return
 [ -z "$KERNVER" ] && read -p "Enter a kernel version: " KERNVER
 [ -z $KERNVER ] && KERNVER=`curl https://www.kernel.org/ | grep -A 1 latest_link | grep -o -P '(?<=.tar.xz">).*(?=</a>)'`
 export KERNVER=$KERNVER
@@ -112,7 +112,7 @@ vinitMap()
 ### Actually run the code
 [ ! -f linux-$KERNVER.tar.xz ] && $AUTOKERNVERB\dlSource
 tar -x$AUTOKERNVERB\Jf linux-$KERNVER.tar.xz || { echo "invalid kernel version"; exit 1; }
-cd linux-$KERNVER
+cd linux-$KERNVER || return
 $AUTOKERNVERB\kernConf
 ## Modify config
 read -p "Would you like to modify the kernel config? [y/N] " response
